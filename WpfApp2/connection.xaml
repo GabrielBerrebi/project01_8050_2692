@@ -1,0 +1,21 @@
+﻿<Window x:Class="WpfApp2.connection"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp2"
+        mc:Ignorable="d"
+        Title="connection" Height="450" Width="800">
+    <Grid Background="#FF181818">
+        <Button Content="Request" HorizontalAlignment="Left" VerticalAlignment="Top" Width="400" Height="70" Click="Button_Click" Background="#FFE2E4DC"/>
+        <Button Content="HostingUnit" HorizontalAlignment="Left" Margin="400,0,-0.4,0" VerticalAlignment="Top" Width="394" Height="70"/>
+        <ListBox x:Name="hosting" HorizontalAlignment="Left" Height="195" Margin="0,70,0,0" VerticalAlignment="Top" Width="400" Background="#FFBBC3C2" />
+        <ListBox x:Name="hosting_unit" HorizontalAlignment="Left" Height="195" Margin="400,70,-0.4,0" VerticalAlignment="Top" Width="394" Background="#FFB6C1C2" />
+        <TextBox x:Name="guestrequestkey" HorizontalAlignment="Left" Height="35" Margin="75,269,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="310"/>
+        <Button Content="interessing" HorizontalAlignment="Left" Margin="0,269,0,0" VerticalAlignment="Top" Width="75" Height="35" Click="Button_Click"/>
+        <Button Content="   DeleteHostingUnit" HorizontalAlignment="Left" Margin="400,265,-0.4,0" VerticalAlignment="Top" Width="394" Height="43" Click="Button_Click_1"/>
+        <Button Content="      AddHostingUnit" HorizontalAlignment="Left" Margin="400,348,-0.4,0" VerticalAlignment="Top" Width="394" Height="42" Click="Button_Click_2"/>
+        <TextBox x:Name="delete" HorizontalAlignment="Left" Height="30" Margin="400,313,-0.4,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="394"/>
+
+    </Grid>
+</Window>
