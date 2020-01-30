@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="Dal_XML.cs" />
     <Compile Include="extensions.cs" />
     <Compile Include="config.cs" />
     <Compile Include="DalFactory.cs" />
@@ -57,6 +58,10 @@
     <ProjectReference Include="..\DSi\DSi.csproj">
       <Project>{da5002a8-f7e5-4d27-9bf0-c100954b31a2}</Project>
       <Name>DSi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\outils\outils.csproj">
+      <Project>{46f3187c-f85e-444f-aa98-10568199fcf3}</Project>
+      <Name>outils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

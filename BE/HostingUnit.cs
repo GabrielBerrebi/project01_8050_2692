@@ -26,6 +26,7 @@ namespace BE
         public HostingUnit()
         {
             Diary = new bool[31, 12];//constructeur pour mon tableau !
+     
             
         }
         

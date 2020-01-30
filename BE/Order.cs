@@ -13,10 +13,15 @@ namespace BE
         public int GuestRequestKey { get; set; }
         public int OrderKey { get; set; }
         public GuestRequest requete { get; set; }
+        public HostingUnit unit { get; set; }
         public Status status { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime OrderDate { get; set; }
         public Status StatutOrder { get; set; }
+        public Order()
+        {
+            
+        }
         public override string ToString()
         {
             return this.TostringProperties();

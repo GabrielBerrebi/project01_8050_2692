@@ -36,5 +36,11 @@ namespace WpfApp2
             HostPageDacceuil host = new HostPageDacceuil();
             host.Show();
         }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            Form2 form2 = new Form2();
+            form2.Show();
+        }
     }
 }

@@ -29,29 +29,23 @@ namespace WpfApp2
         {
             InitializeComponent();
             request = a;
-           List<HostingUnit> temp = new List<HostingUnit>();
-            temp = instance.proposition(a);
-
-            foreach (HostingUnit item in temp)
+         foreach (HostingUnit item in instance.proposition(a))
             {
-                meschoix.Items.Add("Name"+item.HostingUnitName+"     Number"+item.HostingUnitKey+"       description:"+item.Description);
+                meschoix.Items.Add(item.HostingUnitName+"\n Description de notre hotel:"+item.Description+"\n Numero De Commande:"+item.HostingUnitKey+"\n location:"+item.Area);
+             
             }
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             if (chh.Text=="")
             {
-                MessageBox.Show("remplit tout les champs");
+                MessageBox.Show("remplis touts les champs !");
             }
-            foreach (Order item in DataSource.orders)
-            {
-                if (item.HostingUnitKey==int.Parse(chh.Text))
-                {
-                    instance.StatusModify(request);
+          
+                    instance.AddOrder(request,instance.GetHostingUnit(int.Parse(chh.Text)));
                     MessageBox.Show("your request had been sent to the host ");
                     this.Close();
-                }
-            }
+             
         }
     }
 }

@@ -10,6 +10,12 @@
     <Window.Resources>
         <CollectionViewSource x:Key="hostViewSource" d:DesignSource="{d:DesignInstance {x:Type BE:Host}, CreateList=True}"/>
     </Window.Resources>
+    <Window.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="Black" Offset="0"/>
+            <GradientStop Color="#FFD3D190" Offset="1"/>
+        </LinearGradientBrush>
+    </Window.Background>
     <Grid x:Name="gridAddHost" DataContext="{StaticResource hostViewSource}" HorizontalAlignment="Left" Margin="167,144,0,0" VerticalAlignment="Top">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -34,6 +40,7 @@
         <TextBox x:Name="phoneNumberTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="5" Text="{Binding PhoneNumber, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120"/>
         <Label Content="Private Name:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="6" VerticalAlignment="Center"/>
         <TextBox x:Name="privateNameTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="6" Text="{Binding PrivateName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="120"/>
-        <Button Content="Button" Grid.Column="1" HorizontalAlignment="Left" Margin="210.8,29,-239.4,4" Grid.Row="2" Width="155" Grid.RowSpan="3" Click="Button_Click_1"/>
+        <Button Content="insription" Grid.Column="1" HorizontalAlignment="Left" Margin="45.8,62,-14.4,-62" Grid.Row="6" Width="95" Click="Button_Click_1"/>
+        <Button Content="exit" HorizontalAlignment="Left" Margin="-100,-90,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
     </Grid>
 </Window>

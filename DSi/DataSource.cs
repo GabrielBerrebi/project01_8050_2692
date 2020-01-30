@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BE;
+using outils;
 namespace DSi
 {
     public static class DataSource
@@ -45,6 +46,7 @@ namespace DSi
         public static List<Order> orders = new List<Order>();
         public static List<BankBranch> banks = new List<BankBranch>();
         public static List<Host> hosts = new List<Host>();
+        public static List<Order> orderfinal = new List<Order>();
     };
    
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using BE;
 using DAL;
 using DSi;
@@ -13,9 +14,69 @@ namespace BL
     {
 
         Idal instance = DalFactory.Instance;
+
+        public string unitpercity()
+        {
+            string str = "";
+            var city = from HostingUnit unit in DataSource.hostingUn
+                       group unit by unit.Area;
+            foreach (IGrouping<string, HostingUnit> group in city)
+            {
+                str += group.Key + ":";
+                foreach (HostingUnit unit in group)
+                    str += unit.HostingUnitKey;
+            }
+            return str;
+        }
+        public void AddCalendar(GuestRequest x, HostingUnit y)
+        {
+            for (int i = x.EntryDate.Day - 1, j = x.EntryDate.Month - 1; i != x.ReleaseDate.Day - 1 && j != x.ReleaseDate.Month - 1; i++)
+            {
+                y.Diary[i, j] = true;
+                if (i > 30)
+                {
+                    i = 0;
+                    j++;
+                    if (j > 11)
+                    {
+                        j = 0;
+                    }
+                }
+            }
+        }
+       
+        public List<HostingUnit> hostingUnits(int id)
+        {
+            List < HostingUnit>units = new List<HostingUnit>();
+            foreach(HostingUnit unit in DataSource.hostingUn)
+            {
+                if(unit.Owner.HostKey==id)
+                {
+                    units.Add(unit);
+                }
+
+            }
+            return units;
+        }
+        public bool verifyunit(int id)
+        {
+            foreach(HostingUnit unit in  DataSource.hostingUn)
+            {
+                if (unit.HostingUnitKey==id)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public void  HostOrder(int a,int b)
+        {
+            DataSource.orders.Add(new Order {GuestRequestKey=b,HostingUnitKey=a,status=Status.CloseByNoCustomerResponse,unit=GetHostingUnit(a),OrderDate=DateTime.Now, });
+
+        }
         public void AddHost(Host b)
         {
-            DSi.DataSource.hosts.Add(b);
+            instance.AddHost(b);
         }
         public void insert_date(GuestRequest b, HostingUnit a)
         {
@@ -25,13 +86,8 @@ namespace BL
         public bool addhostingunit(HostingUnit hostingUnit)
         {
 
-            if (instance.addhostingunit(hostingUnit) == false)//this hosting unit already exist! 1 ere condition
-            {
-                return false;
-            }
-            else
-                hostingUnit.HostingUnitKey = config.newroom;
-            instance.addhostingunit(hostingUnit);
+             hostingUnit.HostingUnitKey = config.newroom++;
+            DataSource.hostingUn.Add(hostingUnit);
             return true;
         }
 
@@ -47,33 +103,53 @@ namespace BL
               return true;
         }
 
-        public string GetGuestRequest(int id)// affiche toutes les requetes appartenant a un client 
+        public GuestRequest GetGuestRequest(int id)// affiche toutes les requetes appartenant a un client 
         {
-            string str = " ";
-            foreach (GuestRequest request in DataSource.guestRequests)
-            {
-                if (request.GuestRequestKey == id)
-                {
-                    str += request.ToString();
-                }
+            LoadData();
+            GuestRequest guestRequest;
 
+            try
+            {
+                guestRequest = (from n in GuestRequestRoot.Elements()
+                                where int.Parse(n.Element("GuestRequestKey").Value) == id
+                                select new GuestRequest()
+                                {
+                                    GuestRequestKey = int.Parse(n.Element("GuestRequestKey").Value),
+                                    PrivateName = n.Element("Name").Element("PriavteName").Value,
+                                    FamillyName = n.Element("Name").Element("FamilyName").Value,
+                                    MailAddress = n.Element("MailAddress").Value,
+
+                                    RegistrationDate = DateTime.Parse(n.Element("RegistrationDate").Value),
+                                    EntryDate = DateTime.Parse(n.Element("Entrydate").Value),
+                                    ReleaseDate = DateTime.Parse(n.Element("ReleaseDate").Value),
+
+                                    NumAdultes = int.Parse(n.Element("NumAdults").Value),
+                                    Children = int.Parse(n.Element("NumChildren").Value)
+
+                                }).FirstOrDefault();
             }
-            return str;
+            catch
+            {
+                guestRequest = null;
+            }
+
+            return guestRequest;
+
 
         }
 
-        public string GetHostingUnit(int id)//affiche tout mes hosting unit 
+        public HostingUnit GetHostingUnit(int id)//affiche tout mes hosting unit 
         {
-            string str = " ";
-            foreach (HostingUnit unit in DataSource.hostingUn)
+            HostingUnit unit=null;
+            foreach (HostingUnit units in DataSource.hostingUn)
             {
-                if (unit.HostingUnitKey == id)
+                if (units.HostingUnitKey == id)
                 {
-                    str += unit.ToString();
+                    return units;
                 }
 
             }
-            return str;
+            return unit;
         }
 
         public string GetOrder(int id)// affiche tout les orders du client 
@@ -115,13 +191,7 @@ namespace BL
             return true;
         }
 
-        public void StatusModify(GuestRequest status)//fonction qui va modifier le statut de ma commande si elle est accepte
-        {
-            if (status.Status==Status.InProgress )
-            {
-                status.Status = Status.MailSent;
-            }
-        }
+       
 
         private void insert_date(GuestRequest status, object unit)//deja faite du targuil 2 va remplir mes dates
         {
@@ -168,9 +238,13 @@ namespace BL
         {
             DataSource.orders.Add(new Order
             {
-            OrderKey=config.serialorder++,
-            HostingUnitKey=unit.HostingUnitKey,
-                status=Status.InProgress
+                OrderKey = config.serialorder++,
+                HostingUnitKey = unit.HostingUnitKey,
+                unit = unit,
+                requete=requete,
+                status=Status.InProgress,
+                GuestRequestKey=requete.GuestRequestKey
+                
             });
 
         }
@@ -221,9 +295,25 @@ namespace BL
             throw new NotImplementedException();
         }
 
-        bool IBL.verifydate(GuestRequest a, HostingUnit c)
+        bool IBL.verifydate(GuestRequest guest, HostingUnit unit)
         {
-            throw new NotImplementedException();
+            for (int i = guest.EntryDate.Day - 1, j = guest.EntryDate.Month - 1; i != guest.ReleaseDate.Day - 1 && j != guest.ReleaseDate.Month - 1; i++)
+            {
+                if (unit.Diary[i, j] == true)
+                {
+                    return false;
+                }
+                if (i > 30)
+                {
+                    i = 0;
+                    j++;
+                    if (j > 11)
+                    {
+                        j = 0;
+                    }
+                }
+            }
+            return true;
         }
 
         public string GetBankBranch(int id)
@@ -235,17 +325,17 @@ namespace BL
         {
             List<HostingUnit> best = new List<HostingUnit>();
             var compatible2 = from g in DataSource.hostingUn
-                              where g.Area == requete.Area && g.Children <= requete.Children && g.NumAdultes <= requete.NumAdultes && g.Pool == requete.Pool && g.Jaccuzzi == requete.Jaccuzzi &&
+                              where g.Area == requete.Area && g.Children >= requete.Children && g.NumAdultes >= requete.NumAdultes && g.Pool == requete.Pool && g.Jaccuzzi == requete.Jaccuzzi &&
                               g.ChildrenAttraction == requete.ChildrenAttraction && g.Garden == requete.Garden
                               select g;
 
             foreach (HostingUnit item in compatible2)
             {
-                if (verifydate(requete, item) == true)
+                if (verifydate(requete, item))
                 {
                     best.Add(item);
-                    AddOrder(requete, item);
                 }
+              
             }
             return best;
         }
@@ -253,6 +343,53 @@ namespace BL
         void IBL.choose_of_client(int guest, int host)
         {
             throw new NotImplementedException();
+        }
+        XElement GuestRequestRoot;
+        string GuestRequestPath = @"GuestRequestXML.xml";
+
+        public List<GuestRequest> GetGuestRequestList()
+        {
+            LoadData();
+            List<GuestRequest> guestRequest;
+            try
+            {
+                guestRequest = (from n in GuestRequestRoot.Elements()
+                                select new GuestRequest()
+                                {
+                                    GuestRequestKey = int.Parse(n.Element("GuestRequestKey").Value),
+                                    PrivateName = n.Element("Name").Element("PriavteName").Value,
+                                    FamillyName = n.Element("Name").Element("FamilyName").Value,
+                                    MailAddress = n.Element("MailAddress").Value,
+
+                                    RegistrationDate = DateTime.Parse(n.Element("RegistrationDate").Value),
+                                    EntryDate = DateTime.Parse(n.Element("Entrydate").Value),
+                                    ReleaseDate = DateTime.Parse(n.Element("ReleaseDate").Value),
+
+                                    NumAdultes = int.Parse(n.Element("NumAdults").Value),
+                                    Children = int.Parse(n.Element("NumChildren").Value)
+
+
+
+                                }).ToList();
+
+            }
+            catch
+            {
+                guestRequest = null;
+            }
+            return guestRequest;
+        }
+
+        private void LoadData()
+        {
+            try
+            {
+                GuestRequestRoot = XElement.Load(GuestRequestPath);
+            }
+            catch
+            {
+                throw new Exception("File upload problem");
+            }
         }
     }
 }

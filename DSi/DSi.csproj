@@ -42,12 +42,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataSource.cs" />
+    <Compile Include="DataSourceXML.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BE\BE.csproj">
       <Project>{a8480d91-b707-4ef8-92dc-2f8d6ea84ead}</Project>
       <Name>BE</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\outils\outils.csproj">
+      <Project>{46f3187c-f85e-444f-aa98-10568199fcf3}</Project>
+      <Name>outils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

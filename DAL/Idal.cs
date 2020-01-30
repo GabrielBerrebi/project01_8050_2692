@@ -16,6 +16,7 @@ namespace DAL
          bool HostingUnitModify(HostingUnit hostingUnit);
          bool AddOrder(Order order);
          bool ModifyOrder(Order order);
+          bool AddHost(Host a);
           HostingUnit GetHostingUnit(int id);
           GuestRequest GetGuestRequest(int id);
           Order GetOrder(int id);

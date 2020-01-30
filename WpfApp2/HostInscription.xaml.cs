@@ -27,11 +27,10 @@ namespace WpfApp2
         IBL instance = BLfactory.Instance;
         Host host = new Host();
         
-       
         public HostInscription()
         {
             InitializeComponent();
-           // Host host = new Host();
+          
            //this.DataContext = host;
            
         }
@@ -64,6 +63,11 @@ namespace WpfApp2
             // MessageBox.Show(host.ToString());
             
 
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

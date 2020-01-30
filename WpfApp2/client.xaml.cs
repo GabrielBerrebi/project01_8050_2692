@@ -78,12 +78,10 @@ namespace WpfApp2
                 guestRequest.Children = int.Parse(childrenTextBox.Text);
                 guestRequest.EntryDate = DateTime.Parse(registrationDateDatePicker.Text);
                 guestRequest.ReleaseDate = DateTime.Parse(releaseDateDatePicker.Text);
-
+                guestRequest.Status = Status.MailSent;
                 instance.addrequest(guestRequest);
-
                 MessageBox.Show(guestRequest.ToString(), "felicitation vous etes inscris dans nos registres!");
                 proposition prop = new proposition(guestRequest);
-
                 prop.Show();
 
             }

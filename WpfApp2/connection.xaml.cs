@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using BE;
 using BL;
 using DSi;
+using System.Net.Mail;
 namespace WpfApp2
 {
     /// <summary>
@@ -22,74 +23,123 @@ namespace WpfApp2
     public partial class connection : Window
     {
         IBL instance = BLfactory.Instance;
+        private Host temp;
+        private List<Order> orders;
+
+        public object txtMessage { get; private set; }
+
         public connection(int identifiant)
+
         {
             InitializeComponent();
+            foreach (Host host in DataSource.hosts)
+            {
+                if (identifiant == host.HostKey)
+                {
+                    temp = host;
+                }
+            }
+
             List<HostingUnit> Myhosting = new List<HostingUnit>();
             foreach (HostingUnit Hosting in DataSource.hostingUn)
             {
-
-                if (Hosting.Owner.HostKey == identifiant)//Ma liste de hosting  
+                if (Hosting.Owner == temp)
                 {
-                    hosting_unit.Items.Add("HostingUnitKey: " + Hosting.HostingUnitKey);
+                    
+                    hosting_unit.Items.Add("HostingUnitKey: " + Hosting.HostingUnitKey + "  " + Hosting.Description);
                     Myhosting.Add(Hosting);
                 }
 
             }
-            var orders = (from Order order in DataSource.orders
-                          from HostingUnit hosting in Myhosting
-
-                          where order.HostingUnitKey == hosting.HostingUnitKey && order.status==Status.MailSent
-                          select order);
-            foreach (Order order in orders)
+            foreach(Order order in DataSource.orders)
             {
-                hosting.Items.Add("EntryDate: " + order.requete.EntryDate + "ReleaseDate: " + order.requete.ReleaseDate + "HostingUnitkey: " + "requestkey: " + order.GuestRequestKey + order.HostingUnitKey + "FullName: " + order.requete.FamillyName + " " + order.requete.PrivateName);
-            }
-        }
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            GuestRequest requete;
-            if (guestrequestkey.Text == "") { MessageBox.Show("tu dois remplir tout les champs!"); }
-            else
-            
-            foreach (GuestRequest request in DataSource.guestRequests)
-            {
-                if (request.GuestRequestKey == int.Parse(guestrequestkey.Text))
+                if (order.unit.Owner.HostKey==temp.HostKey)
                 {
-                        requete = request;
-                        MessageBox.Show("sent a mail to your client to the email: " + request.MailAddress);
-                        
                     
-                      
+                    hosting.Items.Add(order.OrderKey +"  " +order.requete.EntryDate+" to "+order.requete.ReleaseDate);
                 }
             }
+                    
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            
-            foreach  (HostingUnit hosting in DataSource.hostingUn)
+            int count = 0;
+            if (delete.Text=="")
             {
-                if (int.Parse(delete.Text)==hosting.HostingUnitKey)
-                {
-                instance.releasehostingunit(hosting);
-                 MessageBox.Show("delete with success!");
-                    this.Close();
-                    break;
-                }
+                MessageBox.Show("tu dois remplir tout les champs cherri!");
             }
-            MessageBox.Show("hosting unit not find!");
+            if (instance.verifyunit(int.Parse(delete.Text))==true)
+            {
+                HostingUnit hostingUnit;
+                hostingUnit = instance.GetHostingUnit(int.Parse(delete.Text));
+                if (hostingUnit.Owner.HostKey == temp.HostKey)
+                {
+                    count++;
+                    instance.releasehostingunit(hostingUnit);
+                    MessageBox.Show("delete with success!");
+
+                    this.Close();
+                }
+
+            }
+
+            if (count == 0)
+            {
+                MessageBox.Show("not deleted!");
+            }
         }
+
+
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            addhostingunit add = new addhostingunit();
+            this.Close();
+            addhostingunit add = new addhostingunit(temp);
             add.Show();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+           
+            foreach (Order order in DataSource.orders )
+            {
+                if(order.OrderKey==int.Parse(guestrequestkey.Text))
+                {
+                    instance.AddCalendar(order.requete, order.unit);
+                    order.status = Status.MailSent;
+                    MailMessage mail = new MailMessage();
+                    mail.To.Add("gabriel27051998@gmail.com");
+                    mail.From = new MailAddress(order.unit.Owner.MailAddress);
+                    mail.Subject = "mailSubject";
+                    mail.Body = order.ToString();
+                    mail.IsBodyHtml = true;
+                    SmtpClient smtp = new SmtpClient();
+                    smtp.Credentials = new System.Net.NetworkCredential("projetpremiersemestre@gmail.com","mahonlev");
+                    smtp.EnableSsl = true;
+                   try
+                    {
+                        smtp.Send(mail);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.ToString());
+                    }
+                    
+
+                }
+            }
         }
     }
 
-  
 
-
-  
 }
+
+   
+
+  
+
+
+  
+

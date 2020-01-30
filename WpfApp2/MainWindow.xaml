@@ -6,7 +6,13 @@
         xmlns:local="clr-namespace:WpfApp2"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid Background="#FFB6AEAE" HorizontalAlignment="Right" Margin="0,0,-0.4,0" Width="794">
+    <Grid HorizontalAlignment="Right" Margin="0,0,-0.4,0" Width="794">
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="Black" Offset="0"/>
+                <GradientStop Color="#FF15263F" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="20*"></RowDefinition>
             <RowDefinition Height="45*"></RowDefinition>
@@ -19,8 +25,14 @@
         </Grid.ColumnDefinitions>
         <Button Content="client " HorizontalAlignment="Left" Margin="60,107,0,0" VerticalAlignment="Top" Width="135" Height="30" Click="Button_Click" Grid.Row="1"/>
         <Button Content="Host" HorizontalAlignment="Left" Margin="310,107,0,0" VerticalAlignment="Top" Width="145" Height="31" Click="Button_Click_1" Grid.Row="1"/>
-        <Button Content="Admin" HorizontalAlignment="Left" Margin="565,107,0,0" VerticalAlignment="Top" Width="130" RenderTransformOrigin="0.264,-0.271" Height="31" Grid.Row="1"/>
-        <TextBlock HorizontalAlignment="Left" Margin="-24,10,-0.4,0" TextWrapping="Wrap" Text="                      welcome " VerticalAlignment="Top" Height="80" Width="818" FontSize="48" FontFamily="Segoe UI Black" Grid.ColumnSpan="2"/>
+        <Button Content="Admin" HorizontalAlignment="Left" Margin="565,107,0,0" VerticalAlignment="Top" Width="130" RenderTransformOrigin="0.264,-0.271" Height="31" Grid.Row="1" Click="Button_Click_2"/>
+        <TextBlock HorizontalAlignment="Left" Margin="-24,10,-0.4,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="80" Width="818" FontSize="48" FontFamily="Segoe UI Black" Grid.ColumnSpan="2" Foreground="#FF6E0C0C">
+            <TextBlock.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black" Offset="0"/>
+                    <GradientStop Color="#FF263780" Offset="1"/>
+                </LinearGradientBrush>
+            </TextBlock.Background><Run Text="                      "/><Run Text="welcome "/></TextBlock>
 
     </Grid>
 </Window>

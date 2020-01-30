@@ -8,12 +8,17 @@
         Title="HostPageDacceuil" Height="450" Width="800">
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="C:\Users\97258\source\repos\project01_8050_2692\WpfApp2\img\WhatsApp Image 2020-01-14 at 18.36.14.jpeg"/>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="Black" Offset="0"/>
+                <GradientStop Color="#FF30305C" Offset="1"/>
+            </LinearGradientBrush>
         </Grid.Background>
 
 
         <Button Content="Connect To My Count " HorizontalAlignment="Left" Margin="270,276,0,0" VerticalAlignment="Top" Width="195" Height="49" Click="Button_Click_1"/>
         <Button Content="New Host" HorizontalAlignment="Left" Margin="80,211,0,0" VerticalAlignment="Top" Width="195" Height="49" Click="Button_Click"/>
+        <TextBlock HorizontalAlignment="Left" Margin="175,10,-0.4,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="40" Width="619" Foreground="#FF5F0C0C" FontSize="24" FontFamily="Segoe UI Black"><Run Text="zone reserve "/><Run Text="uniquement "/><Run Text="aux hoste"/></TextBlock>
+        <Button Content="Exit" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="105" Height="20" Click="Button_Click_2"/>
 
     </Grid>
 </Window>

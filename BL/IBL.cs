@@ -9,16 +9,19 @@ namespace BL
 {
     public interface IBL
     {
-        
-        void StatusModify(GuestRequest status);
+       string  unitpercity();
+        void AddCalendar(GuestRequest x, HostingUnit y);
+        List<HostingUnit> hostingUnits(int id);
+        bool verifyunit(int id);
+        void HostOrder(int hosting,int request);
         bool addhostingunit(HostingUnit hostingUnit);
         bool releasehostingunit(HostingUnit hostingUnit);
         bool HostingUnitModify(HostingUnit hostingUnit);
-        void AddOrder(GuestRequest requete);
+        void AddOrder(GuestRequest requete, HostingUnit unit);
         bool verifydate(GuestRequest a, HostingUnit c);
         bool addrequest(GuestRequest getRequest);
-        string  GetHostingUnit(int prenom);
-        string GetGuestRequest(int id);
+        HostingUnit GetHostingUnit(int prenom);
+        GuestRequest GetGuestRequest(int id);
         string GetOrder(int id);
         string  GetBankBranch(int id);
         void AddHost(Host a);
